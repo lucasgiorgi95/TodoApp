@@ -1,0 +1,31 @@
+<section class="bg-bg-200 p-8 w-fit mt-8 mx-auto rounded-xl">
+    <h1 class="text-4xl font-bold text-center mb-6">TO-DO APP</h1>
+    <div class="relative flex items-center rounded-sm overflow-hidden">
+        <input class="w-56 p-4 rounded-lg bg-transparent border border-gray-400" type="text" (keydown.enter)="addTodo()" placeholder="Nueva tarea" [formControl]="newTodo">
+       
+        <button class="absolute right-0 bg-gray-400 text-lg font-black px-2 h-full rounded-r-lg" (click)="addTodo()">+</button>
+    </div>
+    <div class="felx justify-end my-3">
+        <button (click)="changeFilter('all')" [class.active]="filter() === 'all'"  class="p-2 rounded-lg bg-transparent border border-gray-400">Todas</button>
+        <button (click)="changeFilter('active')"  [class.active]="filter() === 'active'"  class="p-2 rounded-lg bg-transparent border border-gray-400">Activas</button>
+        <button (click)="changeFilter('completed')"  [class.active]="filter() === 'completed'"  class="p-2 rounded-lg bg-transparent border border-gray-400">Completadas</button>
+    </div>
+    <ul class="flex flex-col gap-2">
+        @for (todo of todoListFiltered(); track todo.id) {
+            @if (todo.editing) {
+                <li>
+                    <input class="w-full bg-transparent border border-gray-400 rounded-lg px-4 py-2" type="text" placeholder="Editar Tarea" (keydown.enter)="saveTitleTodo(todo.id, $event)" [value]="todo.title"/>
+                </li>
+            }@else {
+                <li class="flex bg-transparent border border-gray-400 rounded-lg px-4 py-2 items-center gap-2 group">
+                    <input (click)="toggleTodo(todo.id)" type="checkbox" [checked]="todo.completed"  class="w-4 h-4 cursor-pointer" >
+                    <label  class="flex-1">{{todo.title}}</label>
+                    @if (!todo.completed) {<button (click)="updateTodoEditingMode(todo.id)" class="hidden group-hover:inline-block peer-checked:inline-block">Editar</button>}
+                    <button (click)="removeTodo(todo.id)" class="hidden group-hover:inline-block peer-checked:inline-block text-red-600">Eliminar</button>
+                </li>
+            }
+            
+          
+        }
+    </ul>
+</section>
